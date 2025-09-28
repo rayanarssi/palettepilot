@@ -1,9 +1,14 @@
 import { useEffect, useMemo, useState } from "react";
 import DropZone from "./components/DropZone";
+import Swatch from "./components/Swatch";
+import { extractPalette } from "./utils/extractPalette";
+import type { RGB } from "./types";
 
 export default function App() {
 	const [file, setFile] = useState<File | null>(null);
 	const [error, setError] = useState<string | null>(null);
+	const [palette, setPalette] = useState<RGB[]>([]);
+	const [loading, setLoading] = useState(false);
 
 	// Create a preview URL for the selected file
 	const previewUrl = useMemo(() => {
@@ -33,6 +38,16 @@ export default function App() {
 		setError(null);
 	};
 
+	// When we have a preview URL, extract colors
+	useEffect(() => {
+		if (!previewUrl) return;
+		setLoading(true);
+		extractPalette(previewUrl, { colors: 8, quality: 10 })
+			.then((cols) => setPalette(cols))
+			.catch(() => setError("Failed to extract colors"))
+			.finally(() => setLoading(false));
+	}, [previewUrl]);
+
 	return (
 		<div className="min-h-screen">
 			<header className="sticky top-0 bg-black/30 backdrop-blur border-b border-white/10">
@@ -60,18 +75,28 @@ export default function App() {
 							{file ? <span className="text-white">{file.name}</span> : "none"}
 						</p>
 					)}
+					{loading && (
+						<p className="mt-2 text-sm text-white/60">Extracting colors…</p>
+					)}
+					{file && previewUrl && (
+						<div className="mt-4 rounded-xl overflow-hidden ring-1 ring-white/10">
+							<img src={previewUrl} alt="Selected" className="w-full" />
+						</div>
+					)}
 				</section>
 
 				<section>
-					<h2 className="font-medium mb-3">Preview</h2>
-					{previewUrl ? (
-						<div className="rounded-xl overflow-hidden ring-1 ring-white/10">
-							<img src={previewUrl} alt="Selected" className="w-full" />
-						</div>
-					) : (
+					<h2 className="font-medium mb-3">Palette</h2>
+					{!palette.length && !loading ? (
 						<p className="text-white/60">
-							No image yet. Pick or drop one on the left.
+							Drop an image to generate a palette.
 						</p>
+					) : (
+						<div className="grid grid-cols-4 gap-3">
+							{palette.map((rgb, i) => (
+								<Swatch key={i} rgb={rgb} />
+							))}
+						</div>
 					)}
 				</section>
 			</main>
