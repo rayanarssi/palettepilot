@@ -11,7 +11,13 @@ import {
 	deletePalette,
 	renamePalette,
 } from "./utils/store";
-import { exportAsJSON, exportAsHex, exportAsCSS } from "./utils/exportPalette";
+import {
+	exportAsJSON,
+	exportAsHex,
+	exportAsCSS,
+	exportAllSavedAsJSON,
+	exportAllSavedAsHex,
+} from "./utils/exportPalette";
 
 export default function App() {
 	const [file, setFile] = useState<File | null>(null);
@@ -189,6 +195,28 @@ export default function App() {
 
 					<div>
 						<h2 className="font-medium mb-3">Saved palettes</h2>
+
+						{saved.length > 0 ? (
+							<div className="mb-3 flex gap-2">
+								<button
+									className="px-3 py-2 rounded-lg bg-white/10 hover:bg-white/15"
+									onClick={() => exportAllSavedAsJSON(saved)}
+								>
+									Export all (JSON)
+								</button>
+								<button
+									className="px-3 py-2 rounded-lg bg-white/10 hover:bg-white/15"
+									onClick={() => exportAllSavedAsHex(saved)}
+								>
+									Export all (HEX)
+								</button>
+							</div>
+						) : (
+							<p className="text-white/60 mb-3 text-sm">
+								No saved palettes yet.
+							</p>
+						)}
+
 						<SavedPalettes
 							items={saved}
 							onLoad={handleLoad}
