@@ -11,6 +11,7 @@ import {
 	deletePalette,
 	renamePalette,
 } from "./utils/store";
+import { exportAsJSON, exportAsHex, exportAsCSS } from "./utils/exportPalette";
 
 export default function App() {
 	const [file, setFile] = useState<File | null>(null);
@@ -72,7 +73,7 @@ export default function App() {
 				"Name this palette:",
 				file?.name?.replace(/\.[^.]+$/, "") || "Untitled palette"
 			) || undefined;
-		const item = savePalette(palette, name);
+		savePalette(palette, name);
 		setSaved(listPalettes()); // refresh
 	};
 
@@ -155,11 +156,34 @@ export default function App() {
 								Drop an image to generate a palette.
 							</p>
 						) : (
-							<div className="grid grid-cols-4 gap-3">
-								{palette.map((rgb, i) => (
-									<Swatch key={i} rgb={rgb} />
-								))}
-							</div>
+							<>
+								<div className="grid grid-cols-4 gap-3">
+									{palette.map((rgb, i) => (
+										<Swatch key={i} rgb={rgb} />
+									))}
+								</div>
+
+								<div className="flex gap-2">
+									<button
+										onClick={() => exportAsJSON(palette)}
+										className="px-3 py-2 rounded-lg bg-white/10 hover:bg-white/15"
+									>
+										Export JSON
+									</button>
+									<button
+										onClick={() => exportAsHex(palette)}
+										className="px-3 py-2 rounded-lg bg-white/10 hover:bg-white/15"
+									>
+										Export HEX
+									</button>
+									<button
+										onClick={() => exportAsCSS(palette)}
+										className="px-3 py-2 rounded-lg bg-white/10 hover:bg-white/15"
+									>
+										Export CSS
+									</button>
+								</div>
+							</>
 						)}
 					</div>
 
