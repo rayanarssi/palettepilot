@@ -2,17 +2,29 @@ import { useEffect, useMemo, useState } from "react";
 import DropZone from "./components/DropZone";
 import Swatch from "./components/Swatch";
 import PaletteControls from "./components/PaletteControls";
+import SavedPalettes from "./components/SavedPalettes";
 import { extractPalette } from "./utils/extractPalette";
-import type { RGB } from "./types";
+import type { RGB, SavedPalette } from "./types";
+import {
+	listPalettes,
+	savePalette,
+	deletePalette,
+	renamePalette,
+} from "./utils/store";
 
 export default function App() {
 	const [file, setFile] = useState<File | null>(null);
 	const [error, setError] = useState<string | null>(null);
 	const [palette, setPalette] = useState<RGB[]>([]);
 	const [loading, setLoading] = useState(false);
+	const [saved, setSaved] = useState<SavedPalette[]>([]);
 
 	const [colors, setColors] = useState(8);
 	const [quality, setQuality] = useState(10);
+
+	useEffect(() => {
+		setSaved(listPalettes());
+	}, []);
 
 	// Create a preview URL for the selected file
 	const previewUrl = useMemo(() => {
@@ -52,6 +64,34 @@ export default function App() {
 			.finally(() => setLoading(false));
 	}, [previewUrl, colors, quality]);
 
+	// Save current palette
+	const handleSave = () => {
+		if (!palette.length) return;
+		const name =
+			prompt(
+				"Name this palette:",
+				file?.name?.replace(/\.[^.]+$/, "") || "Untitled palette"
+			) || undefined;
+		const item = savePalette(palette, name);
+		setSaved(listPalettes()); // refresh
+	};
+
+	// Load a saved palette (replaces current)
+	const handleLoad = (p: SavedPalette) => {
+		setPalette(p.colors);
+		setError(null);
+	};
+
+	const handleDelete = (id: string) => {
+		deletePalette(id);
+		setSaved(listPalettes());
+	};
+
+	const handleRename = (id: string, name: string) => {
+		renamePalette(id, name);
+		setSaved(listPalettes());
+	};
+
 	return (
 		<div className="min-h-screen">
 			<header className="sticky top-0 bg-black/30 backdrop-blur border-b border-white/10">
@@ -87,6 +127,14 @@ export default function App() {
 							<img src={previewUrl} alt="Selected" className="w-full" />
 						</div>
 					)}
+
+					<button
+						className="px-3 py-2 rounded-lg bg-white/10 hover:bg-white/15 disabled:opacity-50"
+						onClick={handleSave}
+						disabled={!palette.length}
+					>
+						Save current palette
+					</button>
 				</section>
 
 				<section className="grid gap-">
@@ -113,6 +161,16 @@ export default function App() {
 								))}
 							</div>
 						)}
+					</div>
+
+					<div>
+						<h2 className="font-medium mb-3">Saved palettes</h2>
+						<SavedPalettes
+							items={saved}
+							onLoad={handleLoad}
+							onDelete={handleDelete}
+							onRename={handleRename}
+						/>
 					</div>
 				</section>
 			</main>
