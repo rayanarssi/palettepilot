@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import DropZone from "./components/DropZone";
 import Swatch from "./components/Swatch";
+import PaletteControls from "./components/PaletteControls";
 import { extractPalette } from "./utils/extractPalette";
 import type { RGB } from "./types";
 
@@ -9,6 +10,9 @@ export default function App() {
 	const [error, setError] = useState<string | null>(null);
 	const [palette, setPalette] = useState<RGB[]>([]);
 	const [loading, setLoading] = useState(false);
+
+	const [colors, setColors] = useState(8);
+	const [quality, setQuality] = useState(10);
 
 	// Create a preview URL for the selected file
 	const previewUrl = useMemo(() => {
@@ -42,11 +46,11 @@ export default function App() {
 	useEffect(() => {
 		if (!previewUrl) return;
 		setLoading(true);
-		extractPalette(previewUrl, { colors: 8, quality: 10 })
+		extractPalette(previewUrl, { colors, quality })
 			.then((cols) => setPalette(cols))
 			.catch(() => setError("Failed to extract colors"))
 			.finally(() => setLoading(false));
-	}, [previewUrl]);
+	}, [previewUrl, colors, quality]);
 
 	return (
 		<div className="min-h-screen">
@@ -85,19 +89,31 @@ export default function App() {
 					)}
 				</section>
 
-				<section>
-					<h2 className="font-medium mb-3">Palette</h2>
-					{!palette.length && !loading ? (
-						<p className="text-white/60">
-							Drop an image to generate a palette.
-						</p>
-					) : (
-						<div className="grid grid-cols-4 gap-3">
-							{palette.map((rgb, i) => (
-								<Swatch key={i} rgb={rgb} />
-							))}
-						</div>
-					)}
+				<section className="grid gap-">
+					<PaletteControls
+						colors={colors}
+						quality={quality}
+						loading={loading}
+						onChange={({ colors: c, quality: q }) => {
+							setColors(c);
+							setQuality(q);
+						}}
+					/>
+
+					<div>
+						<h2 className="font-medium mb-3">Palette</h2>
+						{!palette.length && !loading ? (
+							<p className="text-white/60">
+								Drop an image to generate a palette.
+							</p>
+						) : (
+							<div className="grid grid-cols-4 gap-3">
+								{palette.map((rgb, i) => (
+									<Swatch key={i} rgb={rgb} />
+								))}
+							</div>
+						)}
+					</div>
 				</section>
 			</main>
 		</div>
