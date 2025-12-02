@@ -105,7 +105,7 @@ export default function App() {
 				<div className="max-w-5xl mx-auto px-4 py-4 flex items-center gap-3">
 					<div className="size-7 rounded bg-white/10 overflow-hidden">
 						<img
-							src="/public/logo_white.png"
+							src="./public/logo_white.png"
 							alt="PalettePilot logo"
 							className="w-full h-full object-cover"
 						/>
