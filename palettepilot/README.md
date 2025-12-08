@@ -1,73 +1,20 @@
-# React + TypeScript + Vite
+## PalettePilot
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+PalettePilot is een webapplicatie waarmee gebruikers een afbeelding kunnen uploaden en automatisch een realistisch kleurenpalet laten genereren. De kleuren kunnen daarna worden bekeken, gekopieerd of geëxporteerd voor gebruik in design, branding of creatieve projecten.
 
-Currently, two official plugins are available:
+# 🚀 Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Upload any image (JPG, PNG)
+- Automatic color extraction → Genereert een nauwkeurig kleurenpalet
+- Hex, RGB
+- Copy to clipboard voor snelle workflow
+- Export palette (PNG / JSON / SVG)
+- Instant preview van paletten
 
-## React Compiler
+## TypeScript
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
-
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+[Understanding Errors](https://www.typescriptlang.org/docs/handbook/2/understanding-errors.html)
+[Why using TypeScript](https://stackoverflow.com/questions/12694530/what-is-typescript-and-why-should-i-use-it-instead-of-javascript)
+[Typescript Enums](https://www.w3schools.com/typescript/typescript_enums.php)
+[CoderOne - TypeScript Mistakes](https://www.youtube.com/watch?v=ZCllX1p763U)
+[Traversy Media - TypeScript Crash Course](https://www.youtube.com/watch?v=BCg4U1FzODs)
