@@ -4,6 +4,7 @@ import Swatch from "./components/Swatch";
 import PaletteControls from "./components/PaletteControls";
 import SavedPalettes from "./components/SavedPalettes";
 import { extractPalette } from "./utils/extractPalette";
+import  Logo  from "./../img/Logo_white.png";
 import type { RGB, SavedPalette } from "./types";
 import {
 	listPalettes,
@@ -105,7 +106,7 @@ export default function App() {
 				<div className="max-w-5xl mx-auto px-4 py-4 flex items-center gap-3">
 					<div className="size-7 rounded bg-white/10 overflow-hidden">
 						<img
-							src="./public/logo_white.png"
+							src= {Logo}
 							alt="PalettePilot logo"
 							className="w-full h-full object-cover"
 						/>
